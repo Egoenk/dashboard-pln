@@ -16,15 +16,34 @@ import React from "react";
 import FilterListIcon from '@mui/icons-material/FilterList'; // Make sure to import the icons
 import FileUploadIcon from '@mui/icons-material/FileUpload'; // Make sure to import the icons
 import GetAppIcon from '@mui/icons-material/GetApp'; // Make sure to import the icons
+import xlsxToJson from './xlsxUtils';
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [filterValue, setFilterValue] = React.useState('');
   
-  const handleFilterChange = (event) => {
-    setFilterValue(event.target.value);
-  };
+  const handleFilterChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+        try {
+            const jsonData = await xlsxToJson(file.path, targetRange);
+
+            if (jsonData) {
+                console.log('JSON Data:', jsonData);
+                // Add your logic to handle the JSON data in your dashboard
+            } else {
+                console.error('Error converting Excel to JSON.');
+            }
+        } catch (error) {
+            console.error('Error processing file:', error.message);
+        }
+    }
+
+    // Clear the file input to allow selecting the same file again
+    event.target.value = null;
+};
 
   return (
     <Box m="20px">
@@ -36,22 +55,20 @@ const Dashboard = () => {
         <Box display="flex" gap="8px">
           {/* Small Upload Excel Button */}
           <Button
-            variant="contained"
-            component="label"
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              color: colors.grey[100],
-              '&:hover': {
-                backgroundColor: colors.blueAccent[800],
-              },
-              padding: '10px',
-              // minWidth: 'auto', // Remove this to allow square shape
-            }}
-          >
-            <FileUploadIcon />
-            <input type="file" hidden accept=".xlsx, .xls" />
-          </Button>
-
+              variant="contained"
+              component="label"
+              sx={{
+                backgroundColor: colors.blueAccent[700],
+                color: colors.grey[100],
+                '&:hover': {
+                  backgroundColor: colors.blueAccent[800],
+                },
+                padding: '10px',
+              }}
+>
+                <FileUploadIcon />
+                <input type="file" hidden accept=".xlsx, .xls" onChange={handleFilterChange} />
+              </Button>
           {/* Small Download Reports Button */}
           <Button
             variant="contained"

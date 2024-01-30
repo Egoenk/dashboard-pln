@@ -27,6 +27,8 @@ import Pelanggan from "../src/scenes/Data/PenyambunganPelanggan"
 import Retur from "../src/scenes/Data/Retur/index"
 import SaldoTunggakan from "../src/scenes/Data/SaldoTunggakan/index"
 import PiutangPrabayar from "../src/scenes/Data/PiutangPrabayar/index"
+import { xlsxToJson } from './path/to/xlsxUtils';
+
 
 function App() {
   const [theme, colorMode] = useMode();
