@@ -28,11 +28,10 @@ const Dashboard = () => {
 
     if (file) {
         try {
-            const jsonData = await xlsxToJson(file.path, targetRange);
+            const jsonData = await xlsxToJson(file.path);
 
             if (jsonData) {
-                console.log('JSON Data:', jsonData);
-                // Add your logic to handle the JSON data in your dashboard
+                console.log('Success Extract');
             } else {
                 console.error('Error converting Excel to JSON.');
             }

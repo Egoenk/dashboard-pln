@@ -37,7 +37,15 @@ function check(value) {
     }
 }
 
-async function xlsxToJson(filename, range) {
+async function xlsxToJson(filename) {
+    const targetRange = {
+        startCol: 'E',
+        endCol: 'P',
+        startRow: 6,
+        endRow: 29,
+        groupCol: 0
+    };
+
     try {
         const workbook = XLSX.readFile(filename);
 
@@ -45,7 +53,7 @@ async function xlsxToJson(filename, range) {
 
         workbook.SheetNames.forEach(sheetName => {
             const currentSheet = workbook.Sheets[sheetName];
-            let currentRange = range;
+            let currentRange = targetRange;
 
             for (let rowIndex = currentRange.startRow; rowIndex <= currentRange.endRow; rowIndex++) {
                 const row = XLSX.utils.sheet_to_json(currentSheet, { header: 1, range: `${currentRange.startCol}${rowIndex}:${currentRange.endCol}${rowIndex}` })[0];
@@ -81,22 +89,6 @@ async function xlsxToJson(filename, range) {
         console.error(`Error: ${error.message}`);
         return null;
     }
-}
-
-const targetRange = {
-    startCol: 'E',
-    endCol: 'P',
-    startRow: 6,
-    endRow: 29,
-    groupCol: 0
-};
-
-const jsonOutput = xlsxToJson('Kinerja SARPP - 2023.12.-magang.xlsx', targetRange);
-
-if (jsonOutput !== null) {
-    console.log('JSON Output:');
-    console.log(jsonOutput);
-    console.log('Output saved as output_js.json');
 }
 
 export default xlsxToJson;
